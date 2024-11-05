@@ -8,10 +8,10 @@
     <div class="container">
         <h2>Calculadora de IMC</h2>
         <label>Altura (em metros):</label>
-        <input type="text" id="height" placeholder="Digite sua altura"><br><br>
+        <input type="text" id="height" placeholder="Digite sua altura" inputmode="decimal" pattern="[0-9]*"><br><br>
 
         <label>Peso (em kg):</label>
-        <input type="text" id="weight" placeholder="Digite seu peso"><br><br>
+        <input type="text" id="weight" placeholder="Digite seu peso" inputmode="decimal" pattern="[0-9]*"><br><br>
 
         <button onclick="calculateBMI()">Calcular IMC</button>
 
@@ -19,13 +19,43 @@
     </div>
 
     <script>
+        // Restrição de entrada para aceitar apenas números e ponto/virgula
+        document.getElementById('height').addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^0-9.,]/g, '');
+        });
+
+        document.getElementById('weight').addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^0-9.,]/g, '');
+        });
+
         function calculateBMI() {
             var height = document.getElementById('height').value.replace(',', '.');
             var weight = document.getElementById('weight').value.replace(',', '.');
             var bmi = weight / (height * height);
             var result = document.getElementById('result');
-            
-            result.innerHTML = "Seu IMC é " + bmi.toFixed(2);
+            var message = '';
+
+            if (bmi < 18.5) {
+                message = 'Abaixo do peso';
+            } else if (bmi >= 18.5 && bmi <= 24.9) {
+                message = 'Peso normal';
+            } else if (bmi >= 25 && bmi <= 29.9) {
+                message = 'Sobrepeso';
+            } else if (bmi >= 30 && bmi <= 34.9) {
+                message = 'Obesidade grau I';
+            } else if (bmi >= 35 && bmi <= 39.9) {
+                message = 'Obesidade grau II';
+            } else if (bmi >= 40 && bmi <= 49.9) {
+                message = 'Obesidade grau III';
+            } else if (bmi >= 50 && bmi <= 59.9) {
+                message = 'Obsevidade grau IV';
+            } else if (bmi >= 60) {
+                message = 'Obesidade grau V';
+            }
+
+            if (result) {
+                result.innerHTML = "Seu IMC é " + bmi.toFixed(2) + " - " + message;
+            }
         }
     </script>
 </body>
